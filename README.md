@@ -25,7 +25,7 @@ You can run this application by cloning the repository and running it with pytho
 ### Requirements
 - Python
 - pipenv
-- set your engine database/credentials on mail/settings.py
+- set your engine database/credentials on commerce/settings.py
 
 ### Example for a simple local sqlite
 ```python
