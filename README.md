@@ -9,7 +9,7 @@
 [Brief video on Youtube](https://www.youtube.com/watch?v=k6wBjlU2R3Q&t=14s "video")
 
 #### Description
-This project aims to an ebay like website where users are able to create auctions, place bids, make comments and a feature of watchlisting.
+This project aims to create an ebay like website where users are able to create auctions, place bids, make comments and have a feature of watchlist auctions.
 
 
 ## Table of content
