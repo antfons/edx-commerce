@@ -1,0 +1,18 @@
+body {
+    padding: 10px;
+}
+
+.disabled-div {
+  pointer-events: none ;
+  opacity: 0.7 ;
+}
+
+.comments-div{
+  border-top: 2px dotted #ccc;
+  border-bottom: 2px dotted #ccc;
+}
+.comments-list{
+  /* border-top: 2px dotted #ccc; */
+  border-bottom: 2px dotted #ccc;
+}
+

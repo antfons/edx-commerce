@@ -1,0 +1,121 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ listing.title }}</h2>
+    {% if user.is_authenticated %}
+
+        {% if listing.is_active %}
+        <div>
+        {% else %}
+            {% if higher_bid.user.id == user.id %}
+            <div class="alert alert-success" role="alert">
+                Congratulations! You've win this auction!
+              </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                This listing has ended!
+              </div>            
+            {% endif %}
+        <div class="disabled-div">
+        {% endif %}
+        <div>
+            <form action="{% url 'add_to_watchlist' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="listing_id" value={{listing.id}}> 
+                <input type="submit" value="Watchlist" class="btn btn-secondary form-control col-lg-1">
+            </form>
+        </div>
+            
+            {% if user.id == listing.owner.id%}
+            <br>
+            <div>
+                <form action="{% url 'close_listing' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="listing_id" value={{listing.id}}> 
+                    <input type="submit" value="Close" class="btn btn-danger form-control col-lg-1">
+                </form>
+            </div> 
+            {% endif %}   
+        {% endif %}
+        <br>
+        {% if message %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    </div>
+
+    
+        {% if listing.is_active %}
+        <div>
+        {% else %}
+        <div class="disabled-div">
+        {% endif %}
+        {% if listing.photo_url is not None %}
+            <img src={{listing.photo_url}} alt="No Image" style="max-height: 400px; max-width: 200px;">
+        {% endif %} 
+        <br>
+        {{ listing.description }}
+        <br>
+        {% if higher_bid.value is not None %}
+            <b>${{ higher_bid.value|floatformat:2 }}</b>
+        {% else %}<br>
+            <b>${{ listing.initial_bid|floatformat:2 }}</b><br>
+        {% endif %}
+        <br>
+        {{ listing.bids.all|length }} bid(s) so far.
+        {% if user.is_authenticated %}            
+            {% if higher_bid.user.id == user.id %}
+                Your bid is the current bid.
+            {% endif %}
+        {% endif %}
+        <br>
+        {% if user.is_authenticated %}
+            {% if user.id != listing.owner.id%}
+            <form action="{% url 'add_bid' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="listing_id" value={{listing.id}}>
+                {{ form }}
+                <br>
+                <input type="submit" value="Place Bid" class="btn btn-primary form-control col-lg-1">
+            </form>
+            {% endif %}
+        {% endif %}   
+        <span> <h3>Details</h3></span>
+            <ul>
+                <li>Listed by: {{ listing.owner.username }}</li>
+                {% if listing.category is not None %}
+                    <li>Category: {{ listing.category }}</li>
+                {% else %}
+                    <li>Category: No Category Listed</li>
+                {% endif %}
+            </ul>
+    </div>
+    <div class="comments-div">
+        <span><h3>Comments</h3></span>
+            {% for comment in comments%}
+            <div class="comments-list">
+                <h5>By User:{{ comment.commenter.username}}</h5>
+                <h6>{{ comment.description}}</h6>
+                </div>
+            {% endfor %}
+    </div>   
+              
+    {% if user.is_authenticated %}
+        <form action="{% url 'add_comment' %}" method="POST">
+            {% csrf_token %}
+            <label>Give your comment</label>
+            <br>
+            <textarea name="comment_text" class="form-control" rows="3">
+            </textarea>
+            <br>
+            <input type="hidden" name="listing_id" value={{listing.id}}>
+            <br>
+            <button class="btn btn-light">Submit</button>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}
+
+     
+
